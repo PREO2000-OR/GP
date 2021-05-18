@@ -46,14 +46,8 @@ class Inventory: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 if let data = data {
                     do {
                         // make sure this JSON is in the format we expect
-                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                            // try to read out a string array
-                            let arrayWithNoOptionals = json.compactMap { $0 }
-                            print(arrayWithNoOptionals)
-                            if let names = json["data"] as? [String] {
-                                print(names)
-                            }
-                        }
+                        let json = try JSONSerialization.jsonObject(with: data, options: [])
+                        print(json)
                         
                     } catch let error as NSError {
                         print("Failed to load: \(error.localizedDescription)")
