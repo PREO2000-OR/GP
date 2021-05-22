@@ -35,7 +35,6 @@ class Inventory: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
 
         override func viewDidLoad() {
-            postData(from: postUrl)
             myArray = getData(from: url)
             
             
@@ -71,6 +70,7 @@ class Inventory: UIViewController, UITableViewDelegate, UITableViewDataSource {
         cell.textLabel!.text = "\(myArray[indexPath.row].product_description )"
         cell.buttonTapCallback = {
             print("Deleted " + self.myArray[indexPath.row].product_description)
+            deleteProduct(id: String(self.myArray[indexPath.row].product_id))
             self.myArray.remove(at: indexPath.row)
             self.myTableView.reloadData()
         }
@@ -158,53 +158,20 @@ class MyCell: UITableViewCell {
     }
     
 }
-func postData(from url: URL) {
+
+func deleteProduct(id: String) {
     let semaphore = DispatchSemaphore(value: 0)
     DispatchQueue.global().async {
-        //declare parameter as a dictionary which contains string as key and value combination. considering inputs are valid
-
-            let parameters = ["description": "Producto 5", "unit_id": 5] as [String : Any]
-
-            //create the url with URL
-
-            //create the session object
-            let session = URLSession.shared
-
-            //now create the URLRequest object using the url object
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST" //set http method as POST
-
-            do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) // pass dictionary to nsdata object and set it as request body
-            } catch let error {
-                print(error.localizedDescription)
-            }
-
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-            //create dataTask using the session object to send data to the server
-            let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-
-                guard error == nil else {
-                    return
-                }
-
-                guard let data = data else {
-                    return
-                }
-
-                do {
-                    //create json object from data
-                    if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                        print(json)
-                        // handle json...
+                guard let url = URL(string: "https://maletines.de/products/" + id) else { return }
+                var request = URLRequest(url: url)
+                request.httpMethod = "DELETE"
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                let session = URLSession.shared
+                session.dataTask(with: request) { (data, response, error) in
+                    if let response = response {
+                        print(response)
                     }
-                } catch let error {
-                    print(error.localizedDescription)
-                }
-            })
-            task.resume()
+                }.resume()
         semaphore.signal()
     }
     semaphore.wait()
@@ -245,17 +212,4 @@ private func getData(from url: URL) -> [InventoryData] {
 }
 
 
-final class Message: Codable {
-    var description: String
-    var unit_id: Int
-    init (description: String, unit_id: Int){
-        self.description = description
-        self.unit_id = unit_id
-    }
-}
 
-enum APIError:Error{
-    case responseProblem
-    case decodingProblem
-    case encodingProblem
-}
