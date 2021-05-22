@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -31,7 +31,26 @@
 		F5D42693263241D1000320C1 /* Products.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D42692263241D1000320C1 /* Products.swift */; };
 		F5D42696263241E0000320C1 /* ProductsCreate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D42695263241E0000320C1 /* ProductsCreate.swift */; };
 		F5D42699263241EB000320C1 /* ProductsEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5D42698263241EB000320C1 /* ProductsEdit.swift */; };
+		F5F0B9322658614D009C2529 /* Realm.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F0B92F265860D1009C2529 /* Realm.xcframework */; };
+		F5F0B9332658614D009C2529 /* Realm.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F5F0B92F265860D1009C2529 /* Realm.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F5F0B9352658614E009C2529 /* RealmSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5F0B92E265860BD009C2529 /* RealmSwift.xcframework */; };
+		F5F0B9362658614E009C2529 /* RealmSwift.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F5F0B92E265860BD009C2529 /* RealmSwift.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F5F0B9342658614D009C2529 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F5F0B9332658614D009C2529 /* Realm.xcframework in Embed Frameworks */,
+				F5F0B9362658614E009C2529 /* RealmSwift.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		F55A7D07264E4A8500C24D1C /* InventoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +79,8 @@
 		F5D42692263241D1000320C1 /* Products.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Products.swift; sourceTree = "<group>"; };
 		F5D42695263241E0000320C1 /* ProductsCreate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsCreate.swift; sourceTree = "<group>"; };
 		F5D42698263241EB000320C1 /* ProductsEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsEdit.swift; sourceTree = "<group>"; };
+		F5F0B92E265860BD009C2529 /* RealmSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = RealmSwift.xcframework; sourceTree = "<group>"; };
+		F5F0B92F265860D1009C2529 /* Realm.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Realm.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +88,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5F0B9322658614D009C2529 /* Realm.xcframework in Frameworks */,
+				F5F0B9352658614E009C2529 /* RealmSwift.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +120,8 @@
 				F5D4266026323520000320C1 /* ViewController.swift */,
 				F5D4266226323520000320C1 /* Main.storyboard */,
 				F5D4266526323523000320C1 /* Assets.xcassets */,
+				F5F0B92F265860D1009C2529 /* Realm.xcframework */,
+				F5F0B92E265860BD009C2529 /* RealmSwift.xcframework */,
 				F56FD93F2638C4B100C6C865 /* world.jpg */,
 				F56FD9442638C60600C6C865 /* Screen Shot 2021-04-27 at 17.21.13.png */,
 				F5D4266726323523000320C1 /* LaunchScreen.storyboard */,
@@ -131,6 +156,7 @@
 				F5D4265526323520000320C1 /* Sources */,
 				F5D4265626323520000320C1 /* Frameworks */,
 				F5D4265726323520000320C1 /* Resources */,
+				F5F0B9342658614D009C2529 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
