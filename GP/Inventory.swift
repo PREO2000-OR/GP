@@ -35,16 +35,8 @@ class Inventory: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
 
         override func viewDidLoad() {
-            postData(from: postUrl, completion: {result in
-                switch result{
-                case .success(let message):
-                    print("chido \(message.description)" )
-                case .failure(let error):
-                    print("chafo \(error)")
-                }
-            })
+            postData(from: postUrl)
             myArray = getData(from: url)
-            print(myArray)
             
             
             super.viewDidLoad()
@@ -166,34 +158,53 @@ class MyCell: UITableViewCell {
     }
     
 }
-func postData(from url: URL, completion: @escaping(Result<Message, APIError>) -> Void) {
-    var myArray: [InventoryData] = []
+func postData(from url: URL) {
     let semaphore = DispatchSemaphore(value: 0)
     DispatchQueue.global().async {
-        do{
+        //declare parameter as a dictionary which contains string as key and value combination. considering inputs are valid
+
+            let parameters = ["description": "Producto 5", "unit_id": 5] as [String : Any]
+
+            //create the url with URL
+
+            //create the session object
+            let session = URLSession.shared
+
+            //now create the URLRequest object using the url object
             var request = URLRequest(url: url)
-            let messageToSend = Message(description: "Producto 5", unit_id: 5)
-            request.httpMethod = "POST"
+            request.httpMethod = "POST" //set http method as POST
+
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) // pass dictionary to nsdata object and set it as request body
+            } catch let error {
+                print(error.localizedDescription)
+            }
+
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = try JSONEncoder().encode(messageToSend)
-            let task = URLSession.shared.dataTask(with: request) { data, response, _ in
-                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let jsonData = data else{
-                    completion(.failure(.responseProblem))
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+            //create dataTask using the session object to send data to the server
+            let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+
+                guard error == nil else {
                     return
                 }
-                
-                do {
-                    print(jsonData)
-                    print(httpResponse)
-                    completion(.success(messageToSend))
-                }catch{
-                    completion(.failure(.decodingProblem))
+
+                guard let data = data else {
+                    return
                 }
-            }
+
+                do {
+                    //create json object from data
+                    if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        print(json)
+                        // handle json...
+                    }
+                } catch let error {
+                    print(error.localizedDescription)
+                }
+            })
             task.resume()
-        }catch{
-            completion(.failure(.encodingProblem))
-        }
         semaphore.signal()
     }
     semaphore.wait()
@@ -209,12 +220,9 @@ private func getData(from url: URL) -> [InventoryData] {
                 print("something")
                 return
             }
-            let jsonData = String(data: data, encoding: .utf8)!
-            print(jsonData)
             var result: InventoriesAPIResponse?
             do {
                 result = try JSONDecoder().decode(InventoriesAPIResponse.self, from: data)
-                print(result)
             }
             catch {
                 print("failed to convert")
@@ -224,7 +232,6 @@ private func getData(from url: URL) -> [InventoryData] {
                 return
             }
             myArray = json.data
-            print(myArray)
             semaphore.signal()
     //        self.myArray = json.data
     //        print(self.myArray)
