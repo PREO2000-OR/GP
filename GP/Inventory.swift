@@ -18,6 +18,7 @@ struct InventoryData: Codable {
 
     // MARK: - Properties
     let product_id: Int
+    let unit_id: Int
     let product_description: String
     let quantity: String
 
@@ -56,6 +57,8 @@ class Inventory: UIViewController, UITableViewDelegate, UITableViewDataSource {
             vc.product_description = myArray[indexPath.row].product_description
             vc.quantity = myArray[indexPath.row].quantity
             vc.category = myArray[indexPath.row].product_id
+            vc.id = myArray[indexPath.row].product_id
+            vc.unit_id = myArray[indexPath.row].unit_id
             present(vc, animated: true)
             print("Num: \(indexPath.row)")
             print("Value: \(myArray[indexPath.row])")
