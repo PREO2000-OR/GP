@@ -40,7 +40,7 @@ class Orders: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellOrders", for: indexPath) as! CellOrders
         cell.textLabel!.text = "\(myArray[indexPath.row].client_full_name )"
-        cell.label.text = "3"
+        cell.label.text = myArray[indexPath.row].created_at.components(separatedBy: ", ")[0]
             return cell
     }
     

@@ -22,6 +22,7 @@ struct OrdersData: Codable {
     let order_status_description: String
     let address: String
     let description: String
+    let created_at: String
 }
 
 struct ProductsData: Codable {
@@ -30,6 +31,7 @@ struct ProductsData: Codable {
     let unit_short_time: String
     let product_id: Int
     let product_description: String
+    let created_at: String
 }
 
 class Dashboard: UIViewController {
