@@ -7,19 +7,10 @@
 
 import UIKit
 
+let urlOrders = URL(string: "https://maletines.de/orders/newest")!
+
 class CurrentOrders: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var myArray = [
-            [
-                "a": "1",
-                "b": "2",
-                "c": "3",
-            ],
-            [
-                "a": "4",
-                "b": "5",
-                "c": "6",
-            ]
-        ]
+    var myArray:[OrdersData] = []
     
     
     @IBAction func didTapButtonOrders(){
@@ -32,9 +23,25 @@ class CurrentOrders: UIViewController, UITableViewDelegate, UITableViewDataSourc
         return myArray.count
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let vc = storyboard?.instantiateViewController(identifier: "ordersDetail_vc") as? OrdersDetail else {
+            return
+        }
+        vc.client_id = myArray[indexPath.row].client_id
+        vc.client_full_name = myArray[indexPath.row].client_full_name
+        vc.client_phone = myArray[indexPath.row].client_phone
+        vc.order_status_id = myArray[indexPath.row].order_status_id
+        vc.order_status_description = myArray[indexPath.row].order_status_description
+        vc.descriptionOrders = myArray[indexPath.row].description
+        vc.address = myArray[indexPath.row].address
+        present(vc, animated: true)
+        print("Num: \(indexPath.row)")
+        print("Value: \(myArray[indexPath.row])")
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! Cell
-        cell.textLabel!.text = "\(myArray[indexPath.row]["a"] )"
+        cell.textLabel!.text = "\(myArray[indexPath.row].client_full_name )"
         cell.label.text = "3"
             return cell
     }
@@ -42,7 +49,7 @@ class CurrentOrders: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     @IBOutlet private var Orders: UITableView!
     override func viewDidLoad() {
-        print(myArray)
+        myArray = getDataOrdersReady(from: urlOrders)
         
         
         super.viewDidLoad()
@@ -121,4 +128,37 @@ class Cell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+private func getDataOrdersReady(from url: URL) -> [OrdersData] {
+    var myArray: [OrdersData] = []
+    let semaphore = DispatchSemaphore(value: 0)
+    DispatchQueue.global().async {
+        let task = URLSession.shared.dataTask(    with: url, completionHandler: { data, response, error in
+            guard let data = data, error == nil else {
+                print("something")
+                return
+            }
+            var result: OrdersAPIResponse?
+            do {
+                result = try JSONDecoder().decode(OrdersAPIResponse.self, from: data)
+            }
+            catch {
+                print("failed to convert")
+            }
+            
+            guard let json = result else {
+                return
+            }
+            myArray = json.data
+            semaphore.signal()
+    //        self.myArray = json.data
+    //        print(self.myArray)
+    //            print(json.data)
+    //            print(json.data[0].product_description)
+        })
+        task.resume()
+    }
+    semaphore.wait()
+    return myArray
 }

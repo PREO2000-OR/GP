@@ -42,6 +42,13 @@ class MainMenu: UIViewController {
         }
         present(vc, animated: true)
     }
+    @IBAction func didTapButtonDashboard(){
+        guard let vc = storyboard?.instantiateViewController(identifier: "dashboard_vc") as? Dashboard else {
+            return
+        }
+        
+        present(vc, animated: true)
+    }
     @IBAction func didTapButtonCatalogue(){
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let balanceViewController = storyBoard.instantiateViewController(withIdentifier: "ivc") as! InventoryViewController
